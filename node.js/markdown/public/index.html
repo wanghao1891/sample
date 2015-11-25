@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Marked in the browser</title>
+    <script src="bower_components/marked/lib/marked.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script>
+      document.getElementById('content').innerHTML =
+      marked('# Marked in browser\n\nRendered by **marked**.');
+    </script>
+
+    <textarea id="text-input" oninput="this.editor.update()"
+              rows="6" cols="60">Type **Markdown** here.</textarea>
+    <div id="preview"> </div>
+    <script src="lib/markdown.js"></script>
+    <script>
+      function Editor(input, preview) {
+      this.update = function () {
+      preview.innerHTML = marked(input.value);
+      };
+      input.editor = this;
+      this.update();
+      }
+      var $ = function (id) { return document.getElementById(id); };
+      new Editor($("text-input"), $("preview"));
+    </script>
+  </body>
+</html>

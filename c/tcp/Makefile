@@ -7,12 +7,14 @@ path:
 
 server: server.o
 	gcc -o ${TARGET_PATH}/server server.o
+	rm -f server.o
 
 server.o: server.c
 	gcc -c server.c
 
 client: client.o
 	gcc -o ${TARGET_PATH}/client client.o
+	rm -f client.o
 
 client.o: client.c
 	gcc -c client.c
