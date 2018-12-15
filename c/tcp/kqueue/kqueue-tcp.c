@@ -8,6 +8,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/event.h>
+#include <stdbool.h>        // bool
+#include <assert.h>         // assert
 
 void error(const char *msg)
 {
@@ -39,31 +41,87 @@ int main(int argc, char *argv[])
     error("ERROR on binding");
   listen(sockfd,5);
 
-  int kq;
-  struct kevent evSet;
+  {
+    /* kevent set */
+    struct kevent kevSet;
+    /* events */
+    struct kevent events[20];
+    /* nevents */
+    unsigned nevents;
+    /* kq */
+    int kq;
+    /* buffer */
+    char buf[20];
+    /* length */
+    ssize_t readlen;
 
-  kq = kqueue();
+    kevSet.data     = 5;    // backlog is set to 5
+    kevSet.fflags   = 0;
+    kevSet.filter   = EVFILT_READ;
+    kevSet.flags    = EV_ADD;
+    kevSet.ident    = sockfd;
+    kevSet.udata    = NULL;
 
-  EV_SET(&evSet, sockfd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-  if (kevent(kq, &evSet, 1, NULL, 0, NULL) == -1)
-    error("ERROR kevent");
+    assert((kq = kqueue()) > 0);
 
+    /* Update kqueue */
+    assert(kevent(kq, &kevSet, 1, NULL, 0, NULL) == 0);
 
+    /* Enter loop */
+    while (true) {
+      /* Wait for events to happen */
+      nevents = kevent(kq, NULL, 0, events, 20, NULL);
 
+      assert(nevents >= 0);
 
-  clilen = sizeof(cli_addr);
-  newsockfd = accept(sockfd,
-                     (struct sockaddr *) &cli_addr,
-                     &clilen);
-  if (newsockfd < 0)
-    error("ERROR on accept");
-  bzero(buffer,256);
-  n = read(newsockfd,buffer,255);
-  if (n < 0) error("ERROR reading from socket");
-  printf("Here is the message: %s\n",buffer);
-  n = write(newsockfd,"I got your message",18);
-  if (n < 0) error("ERROR writing to socket");
-  close(newsockfd);
-  close(sockfd);
+      fprintf(stderr, "Got %u events to handle...\n", nevents);
+
+      for (unsigned i = 0; i < nevents; ++i) {
+        struct kevent event = events[i];
+        int clientfd        = (int)event.ident;
+
+        /* Handle disconnect */
+        if (event.flags & EV_EOF) {
+
+          /* Simply close socket */
+          close(clientfd);
+
+          fprintf(stderr, "A client has left the server...\n");
+
+        } else if (clientfd == sockfd) {
+          int nclientfd = accept(sockfd, NULL, NULL);
+
+          assert(nclientfd > 0);
+
+          /* Add to event list */
+          kevSet.data     = 0;
+          kevSet.fflags   = 0;
+          kevSet.filter   = EVFILT_READ;
+          kevSet.flags    = EV_ADD;
+          kevSet.ident    = nclientfd;
+          kevSet.udata    = NULL;
+
+          assert(kevent(kq, &kevSet, 1, NULL, 0, NULL) == 0);
+
+          fprintf(stderr, "A new client connected to the server...\n");
+
+          (void)write(nclientfd, "Welcome to this server!\n", 24);
+        } else if (event.flags & EVFILT_READ) {
+
+          /* sleep for "processing" time */
+          readlen = read(clientfd, buf, sizeof(buf));
+
+          buf[readlen - 1] = 0;
+
+          fprintf(stderr, "bytes %zu are available to read... %s \n", (size_t)event.data, buf);
+
+          //sleep(4);
+        } else {
+          fprintf(stderr, "unknown event: %8.8X\n", event.flags);
+        }
+      }
+    }
+  }
+
   return 0;
 }
