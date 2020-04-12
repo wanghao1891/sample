@@ -15,24 +15,24 @@ let port = 10000;
 let client = new net.Socket();
 
 function start() {
-  if(port === 10060) {
-    port = 10000;
-  } else {
-    port += 1;
-  }
-
   console.log(``);
   console.log(`--------------------- port is ${port} -------------------------`);
 
   client.connect({
     host: 'at.worktile.com',
-    port: 4431,
+    port: 443,
     localPort: port
   });
   //, function() {
   //  console.log('connected to server!');
   //  client.end();
   //});
+  
+  if(port === 10060) {
+    port = 10000;
+  } else {
+    port += 1;
+  }
 }
 
 client.on('close', function(had_error) {
@@ -59,7 +59,7 @@ client.on('end', function() {
 });
 
 client.on('error', function(error) {
-  console.log(`on error: error is ${error}, address is ${JSON.stringify(client.address(), null, 2)}`);
+  console.log(`on error: error is ${error}`);
 
   setTimeout(start, 1000);
 });

@@ -50,7 +50,13 @@ function start() {
         //
         //await Promise.all(steps);
 
+        //await demo.step1();
+        //await demo.step2();
+
         await demo.step1();
+        setTimeout(() => {
+            console.log(10000);
+        }, 10000);
         await demo.step2();
     }
 
