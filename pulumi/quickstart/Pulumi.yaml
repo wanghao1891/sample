@@ -1,0 +1,3 @@
+name: demo-001
+runtime: nodejs
+description: A minimal AWS JavaScript Pulumi program
