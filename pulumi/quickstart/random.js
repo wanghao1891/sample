@@ -1,3 +1,5 @@
+// https://www.pulumi.com/docs/intro/concepts/resources/#dynamicproviders
+
 let pulumi = require("@pulumi/pulumi");
 let crypto = require("crypto");
 let fs = require("fs");
