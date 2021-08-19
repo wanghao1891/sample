@@ -2,7 +2,9 @@
 const pulumi = require("@pulumi/pulumi");
 const aws = require("@pulumi/aws");
 const awsx = require("@pulumi/awsx");
+const Random = require("./random.js").Random;
 
+/*
 // Create an AWS resource (S3 Bucket)
 const bucket = new aws.s3.Bucket("my-bucket", {
     website: {
@@ -20,3 +22,6 @@ const bucketObject = new aws.s3.BucketObject("index.html", {
 // Export the name of the bucket
 exports.bucketName = bucket.id;
 exports.bucketEndpoint = pulumi.interpolate`http://${bucket.websiteEndpoint}`;
+ */
+
+new Random("my-random", {});

@@ -1,0 +1,7 @@
+{
+	"resources": [{
+			"type": "aws:ec2/vpc:Vpc",
+			"name": "application-vpc",
+			"id": "vpc-0b0e438cba5ee4b5b"
+		}	]
+}
