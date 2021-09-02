@@ -1,0 +1,47 @@
+{
+    "version": 3,
+    "deployment": {
+        "manifest": {
+            "time": "2021-08-19T21:34:29.577931+08:00",
+            "magic": "982179aa32cc86f5ab9a0ca8329a57e5eee732d113308e223c882b25186f7361",
+            "version": "v3.10.0"
+        },
+        "secrets_providers": {
+            "type": "passphrase",
+            "state": {
+                "salt": "v1:CD9Q7L9k4IU=:v1:Gd4qTZELxefEO16U:YdJD6B+dGIc5tbrsg0P8rKPsIhkK/g=="
+            }
+        },
+        "resources": [
+            {
+                "urn": "urn:pulumi:random-test::demo-001::pulumi:pulumi:Stack::demo-001-random-test",
+                "custom": false,
+                "type": "pulumi:pulumi:Stack"
+            },
+            {
+                "urn": "urn:pulumi:random-test::demo-001::pulumi:providers:pulumi-nodejs::default",
+                "custom": true,
+                "id": "b27555dc-3e7e-41d6-b12d-e48d3da32082",
+                "type": "pulumi:providers:pulumi-nodejs"
+            },
+            {
+                "urn": "urn:pulumi:random-test::demo-001::pulumi-nodejs:dynamic:Resource::my-random",
+                "custom": true,
+                "id": "7b8fb4a3868823d11ae8dee0d9bf0050",
+                "type": "pulumi-nodejs:dynamic:Resource",
+                "inputs": {
+                    "__provider": "exports.handler = __f0;\n\nvar __provider = {create: __f1};\n\nfunction __f1(__0) {\n  return (function() {\n    with({ fs: require(\"fs\"), crypto: require(\"crypto\") }) {\n\nreturn async function /*create*/(inputs) {\n        fs.writeFileSync(\"/Users/hao/tmp/pulumi.out\", \"hello, world!\", \"utf-8\");\n        return { id: crypto.randomBytes(16).toString('hex'), outs: {id: crypto.randomBytes(16).toString('hex')}};\n    };\n\n    }\n  }).apply(undefined, undefined).apply(this, arguments);\n}\n\nfunction __f0() {\n  return (function() {\n    with({ provider: __provider }) {\n\nreturn () =\u003e provider;\n\n    }\n  }).apply(undefined, undefined).apply(this, arguments);\n}\n"
+                },
+                "outputs": {
+                    "__provider": "exports.handler = __f0;\n\nvar __provider = {create: __f1};\n\nfunction __f1(__0) {\n  return (function() {\n    with({ fs: require(\"fs\"), crypto: require(\"crypto\") }) {\n\nreturn async function /*create*/(inputs) {\n        fs.writeFileSync(\"/Users/hao/tmp/pulumi.out\", \"hello, world!\", \"utf-8\");\n        return { id: crypto.randomBytes(16).toString('hex'), outs: {id: crypto.randomBytes(16).toString('hex')}};\n    };\n\n    }\n  }).apply(undefined, undefined).apply(this, arguments);\n}\n\nfunction __f0() {\n  return (function() {\n    with({ provider: __provider }) {\n\nreturn () =\u003e provider;\n\n    }\n  }).apply(undefined, undefined).apply(this, arguments);\n}\n",
+                    "id": "1f98fc58455fe7f9fe7fb82d28cc6d87"
+                },
+                "parent": "urn:pulumi:random-test::demo-001::pulumi:pulumi:Stack::demo-001-random-test",
+                "provider": "urn:pulumi:random-test::demo-001::pulumi:providers:pulumi-nodejs::default::b27555dc-3e7e-41d6-b12d-e48d3da32082",
+                "propertyDependencies": {
+                    "__provider": null
+                }
+            }
+        ]
+    }
+}
