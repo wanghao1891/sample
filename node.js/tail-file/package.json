@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"tail-file": "^1.4.15"
+	}
+}
